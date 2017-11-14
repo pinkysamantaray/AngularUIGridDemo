@@ -6,7 +6,10 @@ angular.module('myApp', [
   'myApp.view1',
   'myApp.view2',
   'myApp.version',
-  'ui.grid'//, 'ui-grid-cellnav'
+  'ui.grid',
+  'ui.grid.edit',
+  'ui.grid.resizeColumns', 
+  'ui.grid.pagination'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');

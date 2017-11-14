@@ -9,8 +9,9 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', function($scope, $rootScope) {
+.controller('View1Ctrl', function($scope, $rootScope, i18nService) {
     $scope.myData = [];
+    $scope.countRows =0;
     
     $scope.myData = [
         {
@@ -30,6 +31,24 @@ angular.module('myApp.view1', ['ngRoute'])
             "lastName": "Waters",
             "company": "Fuelton",
             "employed": false
+        },        
+        {
+            "firstName": "Mark",
+            "lastName": "Heck",
+            "company": "Orson Quarry",
+            "employed": true
+        },
+        {
+            "firstName": "Sue",
+            "lastName": "Heck",
+            "company": "Spudsy",
+            "employed": true
+        },        
+        {
+            "firstName": "Axl",
+            "lastName": "Heck",
+            "company": "Boss Co.",
+            "employed": true
         }
     ];
     
@@ -45,18 +64,41 @@ angular.module('myApp.view1', ['ngRoute'])
       //gridFooterTemplate : '',
       showColumnFooter : true, //default: false
       showGridFooter : true, //default: false
-      //showHeader : true //default
+      //showHeader : true //default      
+      paginationPageSizes: [5, 10, 20],
+      paginationPageSize: 5,
       columnDefs: [ 
-        { name: 'firstName', displayName : 'FIRST NAME', enableSorting: false },
-        { name: 'lastName', displayName : 'LAST NAME' },
-        { name: 'company', visible: false },
-        { name: 'employed' }
+        { name: 'firstName', displayName : 'FIRST NAME', enableSorting: false, enableCellEdit: false, width: 120 },
+        { name: 'lastName', displayName : 'LAST NAME', enableCellEdit: false, width: 120 },
+        { name: 'company', visible: true, enableCellEdit: true, width: 150 },
+        { name: 'employed', enableCellEdit: true,
+           cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+              if (grid.getCellValue(row,col) === true) {
+                return 'text-success';
+              } else if (grid.getCellValue(row,col) === false) {
+                return 'text-warning';
+              }
+            }
+        }
       ],
       columnFooterHeight : 10,
       data: $scope.myData,
       onRegisterApi : function ( gridApi ) {
           $scope.gridApi = gridApi;
-          //$scope.gridApi.selection.selectAllRows( $scope.gridApi.grid );
+          console.log(gridApi.core.on);
+          console.log(gridApi.grid);
+          gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef){
+              
+              $scope.$apply();
+          })
       }
     };
+    
+    
+      $rootScope.languages = i18nService.getAllLangs();
+      $rootScope.currentLanguage = i18nService.getCurrentLang();
+      $rootScope.changeLanguage = function(){
+          i18nService.setCurrentLang($rootScope.currentLanguage);
+      };
+
 });

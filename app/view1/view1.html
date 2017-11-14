@@ -1,3 +1,5 @@
-<div>
-  <div ui-grid="gridOptions" class="myGrid"></div><!--ui-grid-cellnav-->
-</div>
+<div ui-i18n="{{currentLanguage}}">
+  <div ui-grid="gridOptions" class="myGrid" ui-grid-edit ui-grid-resize-columns ui-grid-pagination></div>
+</div>  
+  
+Language : <select ng-options="language for language in languages" ng-model="currentLanguage" ng-change="changeLanguage()"></select>
